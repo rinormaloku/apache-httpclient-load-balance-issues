@@ -1,6 +1,7 @@
 ## Imbalanced load when using Apache HTTP Client
 
-Workloads without Sidecars cause imbalanced load when using Apache HTTP Client. 
+Client workloads without Istio sidecars cause imbalanced load when using Apache HTTP Client. This happens because the clients keep the connection alive to the server proxy. This happens because [when the Server doesn't specify the keep-alive header the connection is retained indefinitely](https://hc.apache.org/httpcomponents-client-4.5.x/current/tutorial/html/connmgmt.html#:~:text=If%20the%20Keep%2DAlive%20header%20is%20not%20present%20in%20the%20response%2C%20HttpClient%20assumes%20the%20connection%20can%20be%20kept%20alive%20indefinitely.). The envoy proxy removes the Keep-Alive header, thus the clients without the sidecar retain a connection indefinitely.
+
 To test that run the following commands.
 
 Make sure to have istio installed in the cluster and prometheus to visualize your findings.
